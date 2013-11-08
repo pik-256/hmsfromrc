@@ -1,0 +1,17 @@
+<?php
+
+// the connection string will be :
+//    Protocol://Username:Password@Server/Database
+
+$rcmail_config['hmailserver_server_for_hmsrc'] = array(
+    // mssql, sqlsrv, mysql,...
+    'Protocol' => 'sqlsrv',
+    // a server name, location, with eventually a port number or an instance name
+    'Server' => 'some_server', // hostname or ip address
+	'Database' => 'same_database',
+    'Username' => 'username', // windows username
+    // use %xx for special chars (%25 = %, ...)
+    'Password' => 'password' // windows user password
+);
+
+?>

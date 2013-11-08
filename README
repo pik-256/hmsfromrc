@@ -1,0 +1,35 @@
+
+Required plugins:
+    - jqueryui
+
+See config.inc.php.dist.
+
+This plugin directly accees the hMailServerDatabase bypassing the DCOM server.
+
+Tested on :
+    - windows 2012 standard
+	- php 5.5.5
+	    - php driver from http://social.technet.microsoft.com/Forums/sqlserver/fr-FR/e1d37219-88a3-46b2-a421-73bfa33fe433/unofficial-php-55-drivers-x86
+	- sql server 2012 express
+	- hMailServer 5.4B1950
+	- RoundCube 0.9.5
+
+----- ----- ----- ----- ----- -----
+Remarks:
+
+You should have to update PHPWebAdmin by editing include/functions.php as follows:
+ 	
+  function PreprocessOutput($outputString)
+  {
+      //return htmlspecialchars($outputString);
+      return htmlspecialchars($outputString, ENT_COMPAT | ENT_HTML401, 'ISO-8859-1');
+  }
+
+----- ----- ----- ----- ----- -----
+Why another plugin for hMailServer ?
+- for training
+- because the existing one are, imho, too obfuscated.
+
+Why not DCOM ?
+- I really dislike COM/DCOM
+- I imagine RoundCube being hosted far from hMailServer
