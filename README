@@ -17,6 +17,8 @@ Tested on :
 ----- ----- ----- ----- ----- -----
 Remarks:
 
+for at least hMailServer 5.4:
+
 You should have to update PHPWebAdmin by editing include/functions.php as follows:
  	
   function PreprocessOutput($outputString)
@@ -33,3 +35,6 @@ Why another plugin for hMailServer ?
 Why not DCOM ?
 - I really dislike COM/DCOM
 - I imagine RoundCube being hosted far from hMailServer
+
+But ther is now a COM/DCOM version of the plugin.
+Please read : https://www.hmailserver.com/documentation/latest/?page=howto_dcom_permissions
