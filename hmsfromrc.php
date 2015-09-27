@@ -52,7 +52,7 @@ class hmsfromrc extends rcube_plugin
 	function preferences_list($p) {
         try {
             //You must set a block or the section will not be displayed
-            if ( $p['section'] == HMSFROMRC_SECTION ) {
+            if ( $p['section'] == 'server' ) {
                 $this->loadData();
             
                 // ================================================================

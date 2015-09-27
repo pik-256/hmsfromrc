@@ -1,3 +1,16 @@
+# hmsfromrc
+
+This repository is a fork of "hMailServer from RoundCube" which can be found from https://hmsfromrc.codeplex.com/
+
+### Changes from original project
+
+* Plugin UI moved to Preferences > Server Settings to reduce clutter (previously Preferences > hmsfromrc)
+* Forwarding settings added (WIP)
+* Turkish translation
+
+---
+
+## Original README
 
 Required plugins:
     - jqueryui

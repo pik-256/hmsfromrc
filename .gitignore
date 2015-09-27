@@ -1,0 +1,6 @@
+*.swp
+*.cmd
+*.php
+uploader
+_old
+config.inc.php
