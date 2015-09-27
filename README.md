@@ -7,7 +7,10 @@ This repository is a fork of "hMailServer from RoundCube" which can be found fro
 * Plugin UI moved to Preferences > Server Settings to reduce clutter (previously Preferences > hmsfromrc)
 * English and Turkish translation added
 * Autoresponder UI refinements
-* Forwarding settings added (WIP)
+* Forwarding settings added
+
+Please note, this only works reliably with DCOM. hMailServer internally uses a cache which makes direct database manipulation is unreliable. I did not tested the original author's SQL implementation. Use with care. Forwarding will not work using SQL (because I did not implement it)
+I'm considering to drop the SQL support.
 
 ---
 

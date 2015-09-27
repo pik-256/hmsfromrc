@@ -22,6 +22,9 @@ class hmsfromrc extends rcube_plugin {
 	private $ar_body;
 	private $ar_ae_enabled;
 	private $ar_ae_date;
+	private $fw_enabled;
+	private $fw_address;
+	private $fw_keeporiginal;
 
 	function init() {
 		$this->rc = rcmail::get_instance();
@@ -89,10 +92,24 @@ class hmsfromrc extends rcube_plugin {
 				$p['blocks'][FWBLOCK]['name'] = $this->gettext('forwarder');
 
 				$ctrl_id = 'ztp_fw_enabled';
-				$ctrl = new html_checkbox(array('name' => '_fw_enabled', 'id' => $ctrl_id));
+				$ctrl = new html_checkbox(array('name' => '_fw_enabled', 'id' => $ctrl_id, 'value' => 1));
 				$p['blocks'][FWBLOCK]['options']['fw_enabled'] = array(
 					'title' => html::label($ctrl_id, Q($this->gettext('fw_enabled'))),
-					'content' => $ctrl->show('1')
+					'content' => $ctrl->show($this->fw_enabled)
+				);
+
+				$ctrl_id = 'ztp_fw_address';
+				$ctrl = new html_inputfield(array('name' => '_fw_address', 'id' => $ctrl_id));
+				$p['blocks'][FWBLOCK]['options']['fw_address'] = array(
+					'title' => html::label($ctrl_id, Q($this->gettext('fw_address'))),
+					'content' => $ctrl->show($this->fw_address)
+				);
+
+				$ctrl_id = 'ztp_fw_keeporiginal';
+				$ctrl = new html_checkbox(array('name' => '_fw_keeporiginal', 'id' => $ctrl_id, 'value' => 1));
+				$p['blocks'][FWBLOCK]['options']['fw_keeporiginal'] = array(
+					'title' => html::label($ctrl_id, Q($this->gettext('fw_keeporiginal'))),
+					'content' => $ctrl->show($this->fw_keeporiginal)
 				);
 			}
 		} catch (Exception $e) {
@@ -111,7 +128,10 @@ class hmsfromrc extends rcube_plugin {
 				'ar_subject' => get_input_value('_ar_subject', RCUBE_INPUT_POST),
 				'ar_body' => get_input_value('_ar_body', RCUBE_INPUT_POST),
 				'ar_ae_enabled' => get_input_value('_ar_ae_enabled', RCUBE_INPUT_POST),
-				'ar_ae_date' => get_input_value('_ar_ae_date', RCUBE_INPUT_POST)
+				'ar_ae_date' => get_input_value('_ar_ae_date', RCUBE_INPUT_POST),
+				'fw_enabled' => get_input_value('_fw_enabled', RCUBE_INPUT_POST),
+				'fw_address' => get_input_value('_fw_address', RCUBE_INPUT_POST),
+				'fw_keeporiginal' => get_input_value('_fw_keeporiginal', RCUBE_INPUT_POST),
 			));
 		} catch (Exception $e) {
 			$p['abort'] = true;
@@ -183,6 +203,20 @@ class hmsfromrc extends rcube_plugin {
 			$obAccount->VacationMessageIsOn = false;
 		}
 
+		// Forwarding
+		if ($args['fw_enabled'] == "1") {
+			// This fails with internationalized domains. Also needs PHP >=5.2
+			if (filter_var($args['fw_address'], FILTER_VALIDATE_EMAIL) === false) {
+				throw new Exception($this->gettext('ar_fw_invalidaddress'));
+			} else {
+				$obAccount->ForwardEnabled = true;
+				$obAccount->ForwardAddress = $args['fw_address'];
+				$obAccount->ForwardKeepOriginal = ($args['fw_keeporiginal'] == 1);
+			}
+		} else {
+			$obAccount->ForwardEnabled = false;
+		}
+
 		$obAccount->Save();
 
 		if ($alertPEBKAC) {
@@ -225,6 +259,10 @@ class hmsfromrc extends rcube_plugin {
 		$this->ar_body = $obAccount->VacationMessage;
 		$this->ar_ae_enabled = $obAccount->VacationMessageExpires;
 		$this->ar_ae_date = substr($obAccount->VacationMessageExpiresDate, 0, 10);
+
+		$this->fw_enabled = $obAccount->ForwardEnabled;
+		$this->fw_address = $obAccount->ForwardAddress;
+		$this->fw_keeporiginal = $obAccount->ForwardKeepOriginal;
 	}
 
 	function loadDataBySql() {

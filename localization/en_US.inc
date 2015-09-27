@@ -13,5 +13,8 @@ $labels['ar_ae_enabled'] = "Disable AutoResponder After";
 $labels['ar_ae_warning'] = "You selected a date which earlier than tomorrow. Please recheck.";
 
 $labels['fw_enabled'] = $labels['ar_enabled'];
+$labels['fw_address'] = "Forward to";
+$labels['fw_keeporiginal'] = "Keep original message";
+$labels['ar_fw_invalidaddress'] = "Invalid e-mail address, please recheck.";
 
 ?>
