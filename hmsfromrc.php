@@ -37,16 +37,8 @@ class hmsfromrc extends rcube_plugin
 		//localization loading
     	$this->add_texts('localization/');
 	
-	    $this->add_hook('preferences_sections_list', array($this, 'preferences_sections_list'));
 		$this->add_hook('preferences_list', array($this, 'preferences_list'));
 		$this->add_hook('preferences_save', array($this, 'preferences_save')); 
-	}
-	
-	function preferences_sections_list($args) {
-	    //Create a new section in the preferences
-	    $args["list"][HMSFROMRC_SECTION] = array("id" => HMSFROMRC_SECTION, "section" => $this->gettext(HMSFROMRC_SECTION));	
-	    
-	    return $args;
 	}
 	
 	function preferences_list($p) {
@@ -59,14 +51,14 @@ class hmsfromrc extends rcube_plugin
                 //Auto reply
                 
                 $p['blocks'][ARBLOCK]['name'] = $this->gettext('autoreply');
-                
+				
                 $ctrl_id = 'ztp_ar_enabled';
                 $ctrl = new html_checkbox(array ('name' => '_ar_enabled', 'id' => $ctrl_id, 'value' => 1 ));
-                $p['blocks']['ar']['options']['ar_enabled'] = array(
+                $p['blocks'][ARBLOCK]['options']['ar_enabled'] = array(
                     'title' => html::label($ctrl_id, Q($this->gettext('ar_enabled'))),
                     'content' => $ctrl->show($this->ar_enabled)
                 );
-                
+				                
                 $ctrl_id = 'ztp_ar_subject';
                 $ctrl = new html_inputfield(array ('type' => 'text', 'name' => '_ar_subject', 'id' => $ctrl_id));
                 $p['blocks'][ARBLOCK]['options']['ar_subject'] = array(
@@ -94,14 +86,15 @@ class hmsfromrc extends rcube_plugin
                 // ================================================================
                 //Forwarder
                 
-                //$p['blocks'][FWBLOCK]['name'] = $this->gettext('forwarder');
+                $p['blocks'][FWBLOCK]['name'] = $this->gettext('forwarder');
                 
-                //$ctrl_id = 'ztp_fw_enabled';
-                //$ctrl = new html_checkbox(array ('name' => '_fw_enabled', 'id' => $ctrl_id));
-                //$p['blocks'][FWBLOCK]['options']['fw_enabled'] = array(
-                //    'title' => html::label($ctrl_id, Q($this->gettext('fw_enabled'))),
-                //    'content' => $ctrl->show('1')
-                //);
+                $ctrl_id = 'ztp_fw_enabled';
+                $ctrl = new html_checkbox(array ('name' => '_fw_enabled', 'id' => $ctrl_id));
+                $p['blocks'][FWBLOCK]['options']['fw_enabled'] = array(
+                    'title' => html::label($ctrl_id, Q($this->gettext('fw_enabled'))),
+                    'content' => $ctrl->show('1')
+                );
+				
             }
         } catch (Exception $e) {
 		    $p['abort'] = true;
@@ -170,13 +163,32 @@ class hmsfromrc extends rcube_plugin
     function saveDataByCom($user, $args) {        
         $obAccount = $this->getHmsComServer($user);
         
-        $obAccount->VacationMessageIsOn = $args['ar_enabled'] == "1";
-        $obAccount->VacationSubject = $args['ar_subject']; //"test";
-	    $obAccount->VacationMessage = $args['ar_body'];
-        $obAccount->VacationMessageExpires = $args['ar_ae_enabled'] == "1";
-        $obAccount->VacationMessageExpiresDate = $args['ar_ae_date'];
-        
+		// Vacation Message
+		if ($args['ar_enabled'] == "1") {
+			$obAccount->VacationMessageIsOn = true;
+			$obAccount->VacationSubject = $args['ar_subject'];
+			$obAccount->VacationMessage = $args['ar_body'];
+			
+			if ($args['ar_ae_enabled'] == "1") {				
+				if (new DateTime() > new DateTime($args['ar_ae_date'])) {
+					$obAccount->VacationMessageExpires = false;
+					$alertPEBKAC = true;
+				} else {
+					$obAccount->VacationMessageExpires = true;
+					$obAccount->VacationMessageExpiresDate = $args['ar_ae_date'];
+				}
+			} else {
+				$obAccount->VacationMessageExpires = false;
+			}			
+		} else {
+			$obAccount->VacationMessageIsOn = false;
+		}
+                
         $obAccount->Save();
+		
+		if ($alertPEBKAC) {
+			throw new Exception($this->gettext('ar_ae_warning'));
+		}
     }
 	
 	function saveDataBySql($user, $args) {	    
