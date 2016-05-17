@@ -1,11 +1,11 @@
 <?php
 
 /*
- * 
+ *
   Original Author: thierry schmit (thierry.schmit@gmail.com)
   Modifications: Hazar Karabay (hazarkarabay.com.tr)
   Licence: CC BY 4.0 (Attibution International) [http://creativecommons.org/licenses/by/4.0/]
- * 
+ *
  */
 
 // if your change this value, please think to localization
@@ -156,8 +156,7 @@ class hmsfromrc extends rcube_plugin {
 		$conf = $this->rc->config->get('hmailserver_server_for_hmsrc');
 		$obBaseApp = new COM("hMailServer.Application", NULL, CP_UTF8);
 		$obBaseApp->Connect();
-		$obBaseApp->Authenticate($conf['Username'], $conf['Password']);
-
+		$obBaseApp->Authenticate($_SESSION['username'], $this->rc->decrypt($_SESSION['password']));
 		$obDomain = $obBaseApp->Domains->ItemByName(substr($user, strpos($user, "@") + 1));
 		return $obDomain->Accounts->ItemByAddress($user);
 	}
