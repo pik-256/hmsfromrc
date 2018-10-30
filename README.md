@@ -1,6 +1,6 @@
 # hmsfromrc
 
-This repository is a fork of "hMailServer from RoundCube" which can be found at https://hmsfromrc.codeplex.com/ (oroinal), then at hazarkarabay/hmsfromrc
+This repository is a fork of "hMailServer from RoundCube" which can be found at https://hmsfromrc.codeplex.com/ (original), then at https://github.com/hazarkarabay/hmsfromrc (modified)
 
 ### Changes from original project
 
