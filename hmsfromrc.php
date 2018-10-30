@@ -1,11 +1,12 @@
 <?php
 
 /*
- * 
+ *
   Original Author: thierry schmit (thierry.schmit@gmail.com)
   Modifications: Hazar Karabay (hazarkarabay.com.tr)
+                 minor change by PiK for compatibility with RC 1.3
   Licence: CC BY 4.0 (Attibution International) [http://creativecommons.org/licenses/by/4.0/]
- * 
+ *
  */
 
 // if your change this value, please think to localization
@@ -58,21 +59,21 @@ class hmsfromrc extends rcube_plugin {
 				$ctrl_id = 'ztp_ar_enabled';
 				$ctrl = new html_checkbox(array('name' => '_ar_enabled', 'id' => $ctrl_id, 'value' => 1));
 				$p['blocks'][ARBLOCK]['options']['ar_enabled'] = array(
-					'title' => html::label($ctrl_id, Q($this->gettext('ar_enabled'))),
+					'title' => html::label($ctrl_id, rcube::Q($this->gettext('ar_enabled'))),
 					'content' => $ctrl->show($this->ar_enabled)
 				);
 
 				$ctrl_id = 'ztp_ar_subject';
 				$ctrl = new html_inputfield(array('type' => 'text', 'name' => '_ar_subject', 'id' => $ctrl_id));
 				$p['blocks'][ARBLOCK]['options']['ar_subject'] = array(
-					'title' => html::label($ctrl_id, Q($this->gettext('ar_subject'))),
+					'title' => html::label($ctrl_id, rcube::Q($this->gettext('ar_subject'))),
 					'content' => $ctrl->show($this->ar_subject)
 				);
 
 				$ctrl_id = 'ztp_ar_body';
 				$ctrl = new html_textarea(array('name' => '_ar_body', 'id' => $ctrl_id, 'rows' => 5, 'cols' => 50));
 				$p['blocks'][ARBLOCK]['options']['ar_body'] = array(
-					'title' => html::label($ctrl_id, Q($this->gettext('ar_body'))),
+					'title' => html::label($ctrl_id, rcube::Q($this->gettext('ar_body'))),
 					'content' => $ctrl->show($this->ar_body)
 				);
 
@@ -81,7 +82,7 @@ class hmsfromrc extends rcube_plugin {
 				$ctrl2_id = 'ztp_ar_ae_date';
 				$ctrl2 = new html_inputfield(array('name' => '_ar_ae_date', 'id' => $ctrl2_id));
 				$p['blocks'][ARBLOCK]['options']['ar_ae_enabled'] = array(
-					'title' => html::label($ctrl_id, Q($this->gettext('ar_ae_enabled'))),
+					'title' => html::label($ctrl_id, rcube::Q($this->gettext('ar_ae_enabled'))),
 					'content' => $ctrl->show($this->ar_ae_enabled) . " " . $ctrl2->show($this->ar_ae_date)
 				);
 
@@ -94,21 +95,21 @@ class hmsfromrc extends rcube_plugin {
 				$ctrl_id = 'ztp_fw_enabled';
 				$ctrl = new html_checkbox(array('name' => '_fw_enabled', 'id' => $ctrl_id, 'value' => 1));
 				$p['blocks'][FWBLOCK]['options']['fw_enabled'] = array(
-					'title' => html::label($ctrl_id, Q($this->gettext('fw_enabled'))),
+					'title' => html::label($ctrl_id, rcube::Q($this->gettext('fw_enabled'))),
 					'content' => $ctrl->show($this->fw_enabled)
 				);
 
 				$ctrl_id = 'ztp_fw_address';
 				$ctrl = new html_inputfield(array('name' => '_fw_address', 'id' => $ctrl_id));
 				$p['blocks'][FWBLOCK]['options']['fw_address'] = array(
-					'title' => html::label($ctrl_id, Q($this->gettext('fw_address'))),
+					'title' => html::label($ctrl_id, rcube::Q($this->gettext('fw_address'))),
 					'content' => $ctrl->show($this->fw_address)
 				);
 
 				$ctrl_id = 'ztp_fw_keeporiginal';
 				$ctrl = new html_checkbox(array('name' => '_fw_keeporiginal', 'id' => $ctrl_id, 'value' => 1));
 				$p['blocks'][FWBLOCK]['options']['fw_keeporiginal'] = array(
-					'title' => html::label($ctrl_id, Q($this->gettext('fw_keeporiginal'))),
+					'title' => html::label($ctrl_id, rcube::Q($this->gettext('fw_keeporiginal'))),
 					'content' => $ctrl->show($this->fw_keeporiginal)
 				);
 			}
@@ -156,8 +157,7 @@ class hmsfromrc extends rcube_plugin {
 		$conf = $this->rc->config->get('hmailserver_server_for_hmsrc');
 		$obBaseApp = new COM("hMailServer.Application", NULL, CP_UTF8);
 		$obBaseApp->Connect();
-		$obBaseApp->Authenticate($conf['Username'], $conf['Password']);
-
+		$obBaseApp->Authenticate($_SESSION['username'], $this->rc->decrypt($_SESSION['password']));
 		$obDomain = $obBaseApp->Domains->ItemByName(substr($user, strpos($user, "@") + 1));
 		return $obDomain->Accounts->ItemByAddress($user);
 	}
