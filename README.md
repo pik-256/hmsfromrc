@@ -1,6 +1,6 @@
 # hmsfromrc
 
-This repository is a fork of "hMailServer from RoundCube" which can be found from https://hmsfromrc.codeplex.com/
+This repository is a fork of "hMailServer from RoundCube" which can be found at https://hmsfromrc.codeplex.com/ (oroinal), then at hazarkarabay/hmsfromrc
 
 ### Changes from original project
 
@@ -12,7 +12,7 @@ This repository is a fork of "hMailServer from RoundCube" which can be found fro
 Please note, this only works reliably with DCOM. hMailServer internally uses a cache which makes direct database manipulation is unreliable. I did not tested the original author's SQL implementation. Use with care. Forwarding will not work using SQL (because I did not implement it)
 I'm considering to drop the SQL support.
 
-### Additional changes
+### Additional changes (by PiK)
 
 * FIX for compatibility with RC 1.3
 * Polish translation
