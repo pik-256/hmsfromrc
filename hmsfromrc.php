@@ -125,14 +125,14 @@ class hmsfromrc extends rcube_plugin {
 	function preferences_save($p) {
 		try {
 			$this->saveData(array(
-				'ar_enabled' => get_input_value('_ar_enabled', RCUBE_INPUT_POST),
-				'ar_subject' => get_input_value('_ar_subject', RCUBE_INPUT_POST),
-				'ar_body' => get_input_value('_ar_body', RCUBE_INPUT_POST),
-				'ar_ae_enabled' => get_input_value('_ar_ae_enabled', RCUBE_INPUT_POST),
-				'ar_ae_date' => get_input_value('_ar_ae_date', RCUBE_INPUT_POST),
-				'fw_enabled' => get_input_value('_fw_enabled', RCUBE_INPUT_POST),
-				'fw_address' => get_input_value('_fw_address', RCUBE_INPUT_POST),
-				'fw_keeporiginal' => get_input_value('_fw_keeporiginal', RCUBE_INPUT_POST),
+				'ar_enabled' => rcube_utils::get_input_value('_ar_enabled', rcube_utils::INPUT_POST),
+				'ar_subject' => rcube_utils::get_input_value('_ar_subject', rcube_utils::INPUT_POST),
+				'ar_body' => rcube_utils::get_input_value('_ar_body', rcube_utils::INPUT_POST),
+				'ar_ae_enabled' => rcube_utils::get_input_value('_ar_ae_enabled', rcube_utils::INPUT_POST),
+				'ar_ae_date' => rcube_utils::get_input_value('_ar_ae_date', rcube_utils::INPUT_POST),
+				'fw_enabled' => rcube_utils::get_input_value('_fw_enabled', rcube_utils::INPUT_POST),
+				'fw_address' => rcube_utils::get_input_value('_fw_address', rcube_utils::INPUT_POST),
+				'fw_keeporiginal' => rcube_utils::get_input_value('_fw_keeporiginal', rcube_utils::INPUT_POST),
 			));
 		} catch (Exception $e) {
 			$p['abort'] = true;
